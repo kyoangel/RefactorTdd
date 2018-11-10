@@ -4,24 +4,6 @@ using System.Collections.Generic;
 
 namespace RefactorTdd.Tests
 {
-	//_fakeBudgetRepo.AddBudget(new List<Budget>()
-	//{
-	//	new Budget()
-	//	{
-	//		YearMonth = "201712",
-	//		Amount = 31000
-	//	},
-	//	new Budget()
-	//	{
-	//		YearMonth = "201801",
-	//		Amount = 31
-	//	},
-	//	new Budget()
-	//	{
-	//		YearMonth = "201802",
-	//		Amount = 280
-	//	}
-	//});
 	[TestClass()]
 	public class BudgetServiceTests
 	{
@@ -39,7 +21,6 @@ namespace RefactorTdd.Tests
 		public void No_budget_return_zero()
 		{
 			var totalAmount = _budgetService.TotalAmount(new DateTime(2018, 4, 1), new DateTime(2018, 4, 3));
-
 			AmountShouldBe(0, totalAmount);
 		}
 
