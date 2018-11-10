@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 
-namespace RefactorTdd.Tests
+
+namespace RefactorTdd
 {
 	public interface IBudgetRepo
 	{

@@ -56,9 +56,7 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
-    <Compile Include="BudgetRepo.cs" />
     <Compile Include="BudgetServiceTests.cs" />
-    <Compile Include="IBudgetRepo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
