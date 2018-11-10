@@ -4,6 +4,24 @@ using System.Collections.Generic;
 
 namespace RefactorTdd.Tests
 {
+	//_fakeBudgetRepo.AddBudget(new List<Budget>()
+	//{
+	//	new Budget()
+	//	{
+	//		YearMonth = "201712",
+	//		Amount = 31000
+	//	},
+	//	new Budget()
+	//	{
+	//		YearMonth = "201801",
+	//		Amount = 31
+	//	},
+	//	new Budget()
+	//	{
+	//		YearMonth = "201802",
+	//		Amount = 280
+	//	}
+	//});
 	[TestClass()]
 	public class BudgetServiceTests
 	{
@@ -28,6 +46,7 @@ namespace RefactorTdd.Tests
 		[TestMethod()]
 		public void One_Day()
 		{
+			_fakeBudgetRepo.AddBudget("201801", 31);
 			var totalAmount = _budgetService.TotalAmount(new DateTime(2018, 1, 1), new DateTime(2018, 1, 1));
 			AmountShouldBe(1, totalAmount);
 		}
@@ -37,12 +56,12 @@ namespace RefactorTdd.Tests
 			Assert.AreEqual(expected, actual);
 		}
 
-		
-
 		[TestMethod()]
 		public void SameMonth_MultiDays()
 
 		{
+			_fakeBudgetRepo.AddBudget("201801", 31);
+
 			var totalAmount = _budgetService.TotalAmount(new DateTime(2018, 1, 1), new DateTime(2018, 1, 3));
 			AmountShouldBe(3, totalAmount);
 		}
@@ -50,42 +69,55 @@ namespace RefactorTdd.Tests
 		[TestMethod()]
 		public void InvalidDayRange()
 		{
+			_fakeBudgetRepo.AddBudget("201801", 31);
+
 			var totalAmount = _budgetService.TotalAmount(new DateTime(2018, 1, 3), new DateTime(2018, 1, 1));
 			AmountShouldBe(0, totalAmount);
-
 		}
 
 		[TestMethod()]
 		public void DiffMonth_WithBudgets()
 		{
+			_fakeBudgetRepo.AddBudget("201801", 31);
+			_fakeBudgetRepo.AddBudget("201802", 280);
+
 			var totalAmount = _budgetService.TotalAmount(new DateTime(2018, 1, 31), new DateTime(2018, 2, 1));
 			AmountShouldBe(11, totalAmount);
+		}
 
+		[TestMethod()]
+		public void DiffYear_WithBudgets()
+		{
+			_fakeBudgetRepo.AddBudget("201712", 31000);
+			_fakeBudgetRepo.AddBudget("201801", 31);
+
+			var totalAmount = _budgetService.TotalAmount(new DateTime(2017, 12, 31), new DateTime(2018, 1, 1));
+			AmountShouldBe(1001, totalAmount);
+		}
+
+		[TestMethod()]
+		public void DiffYear_With_Cross_MultiMonthBudgets()
+		{
+			_fakeBudgetRepo.AddBudget("201712", 31000);
+			_fakeBudgetRepo.AddBudget("201801", 31);
+			_fakeBudgetRepo.AddBudget("201802", 280);
+			var totalAmount = _budgetService.TotalAmount(new DateTime(2017, 12, 31), new DateTime(2018, 2, 1));
+			AmountShouldBe(1041, totalAmount);
 		}
 	}
 
 	public class FakeBudgetRepo : IBudgetRepo
 	{
+		private List<Budget> _budgets = new List<Budget>();
+
 		public virtual List<Budget> GetAll()
 		{
-			return new List<Budget>()
-			{
-				new Budget()
-				{
-					YearMonth = "201712",
-					Amount = 31000
-				},
-				new Budget()
-				{
-					YearMonth = "201801",
-					Amount = 31
-				},
-				new Budget()
-				{
-					YearMonth = "201802",
-					Amount = 280
-				}
-			};
+			return _budgets;
+		}
+
+		public void AddBudget(string yearMonth, int amount)
+		{
+			_budgets.Add(new Budget() { YearMonth = yearMonth, Amount = amount });
 		}
 	}
 }
