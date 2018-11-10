@@ -23,12 +23,11 @@ namespace RefactorTdd
 				return 0;
 			}
 
-			var s = start.ToString("yyyyMM");
 			var budgets = _repo.GetAll();
 
 			if (IsSameMonth(start, end))
 			{
-				var budget = budgets.SingleOrDefault(x => x.YearMonth.Equals(s));
+				var budget = budgets.SingleOrDefault(x => x.YearMonth.Equals(start.ToString("yyyyMM")));
 				if (budget == null)
 				{
 					return 0;
@@ -49,7 +48,7 @@ namespace RefactorTdd
 					{
 						if (tempDate.ToString("yyyyMM") == start.ToString("yyyyMM"))
 							aggrAmount += AmountPerDayInMonth(budgetByMonth, start) *
-							              (DateTime.DaysInMonth(start.Year, start.Month) - start.Day + 1);
+										  (DateTime.DaysInMonth(start.Year, start.Month) - start.Day + 1);
 						else if (tempDate.ToString("yyyyMM") == end.ToString("yyyyMM"))
 							aggrAmount += AmountPerDayInMonth(budgetByMonth, end) * end.Day;
 						else
