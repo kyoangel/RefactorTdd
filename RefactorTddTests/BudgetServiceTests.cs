@@ -67,6 +67,42 @@ namespace RefactorTdd.Tests
 		}
 
 		[TestMethod()]
+		public void period_no_overlapping_before_budget_firstDay()
+		{
+			_fakeBudgetRepo.AddBudget("201802", 280);
+
+			var totalAmount = _budgetService.TotalAmount(new DateTime(2018, 1, 31), new DateTime(2018, 1, 31));
+			AmountShouldBe(0, totalAmount);
+		}
+
+		[TestMethod()]
+		public void period_no_overlapping_after_budget_lastDay()
+		{
+			_fakeBudgetRepo.AddBudget("201802", 280);
+
+			var totalAmount = _budgetService.TotalAmount(new DateTime(2018, 3, 31), new DateTime(2018, 3, 31));
+			AmountShouldBe(0, totalAmount);
+		}
+
+		[TestMethod()]
+		public void period_overlapping_budget_firstDay()
+		{
+			_fakeBudgetRepo.AddBudget("201802", 280);
+
+			var totalAmount = _budgetService.TotalAmount(new DateTime(2018, 1, 31), new DateTime(2018, 2, 1));
+			AmountShouldBe(10, totalAmount);
+		}
+
+		[TestMethod()]
+		public void period_overlapping_budget_lastDay()
+		{
+			_fakeBudgetRepo.AddBudget("201802", 280);
+
+			var totalAmount = _budgetService.TotalAmount(new DateTime(2018, 2, 28), new DateTime(2018, 3, 1));
+			AmountShouldBe(10, totalAmount);
+		}
+
+		[TestMethod()]
 		public void DiffYear_WithBudgets()
 		{
 			_fakeBudgetRepo.AddBudget("201712", 31000);
